@@ -29,6 +29,7 @@ class CPlayerInput
 				actionLocks.Grow(EnumGetMax('EInputActionBlock')+1);
 			}
 		}
+		theInput.RegisterListener( this, 'OnAutoLootRadiusLoot', 'AutoLootRadius' );
 		
 		theInput.RegisterListener( this, 'OnCommSprint', 'Sprint' );
 		theInput.RegisterListener( this, 'OnCommSprintToggle', 'SprintToggle' );
@@ -515,7 +516,23 @@ class CPlayerInput
 		return '';
 	}
 
-	
+	// autoloot radius loot feature
+	event OnAutoLootRadiusLoot(  action : SInputAction )
+	{
+		var AutoLootInstance : AutoLootMod;
+		
+		AutoLootInstance = new AutoLootMod in this;
+		AutoLootInstance.Initialize();
+		
+		// we check if this feature is enabled
+		if( AutoLootInstance.IsRadiusLootEnabled() )
+		{
+			AutoLootInstance.RadiusLoot();
+		}
+		
+		// cleanup
+		delete AutoLootInstance;
+	}
 	
 	
 	event OnCommSprint( action : SInputAction )
